@@ -155,13 +155,16 @@
     <main class="grid grid-cols-1 xl:grid-cols-[340px_1.1fr_.85fr] lg:grid-cols-[340px_1fr] gap-6 max-w-[1440px] mx-auto px-6 py-6 items-start">
         <!-- ============ iPhone simulator ============ -->
         <section class="lg:sticky lg:top-24 justify-self-center">
-            <div class="relative mx-auto w-[322px] h-[662px] rounded-[54px] p-3 bg-gradient-to-b from-[#3a3f52] via-[#14161f] to-[#3a3f52] shadow-phone">
-                <div class="absolute inset-[3px] rounded-[52px] bg-ink-950"></div>
-                <!-- side buttons -->
-                <div class="absolute -left-[3px] top-32 w-[3px] h-9 rounded bg-[#2a2e3d]"></div>
-                <div class="absolute -left-[3px] top-44 w-[3px] h-14 rounded bg-[#2a2e3d]"></div>
-                <div class="absolute -right-[3px] top-40 w-[3px] h-16 rounded bg-[#2a2e3d]"></div>
-                <div class="relative w-full h-full rounded-[44px] overflow-hidden bg-gradient-to-b from-[#1a2b57] via-[#0f1830] to-ink-950 ring-1 ring-black/40">
+            <div class="relative mx-auto w-[322px] h-[662px] rounded-[54px] p-[11px] bg-gradient-to-b from-[#f6f7fb] via-[#c9cdd9] to-[#eceef4] shadow-phone ring-1 ring-white/50">
+                <!-- metallic sheen -->
+                <div class="absolute inset-0 rounded-[54px] bg-gradient-to-tr from-transparent via-white/25 to-transparent pointer-events-none"></div>
+                <!-- thin black rim between bezel and screen -->
+                <div class="absolute inset-[9px] rounded-[46px] bg-black"></div>
+                <!-- side buttons (silver) -->
+                <div class="absolute -left-[2px] top-32 w-[3px] h-9 rounded bg-[#aeb2be] shadow"></div>
+                <div class="absolute -left-[2px] top-44 w-[3px] h-14 rounded bg-[#aeb2be] shadow"></div>
+                <div class="absolute -right-[2px] top-40 w-[3px] h-16 rounded bg-[#aeb2be] shadow"></div>
+                <div class="relative w-full h-full rounded-[44px] overflow-hidden bg-gradient-to-b from-[#1a2b57] via-[#0f1830] to-ink-950 ring-1 ring-black/60">
                     <!-- dynamic island -->
                     <div class="absolute top-2.5 left-1/2 -translate-x-1/2 w-[108px] h-[30px] bg-black rounded-full z-20"></div>
                     <!-- status bar -->
