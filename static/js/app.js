@@ -161,11 +161,11 @@ function renderEntities(e) {
 /* ================= In-phone alert + voice ================= */
 function showAlert(r) {
     const el = $("phoneAlert");
-    const cls = r.level === "SCAM" ? "scam" : r.level === "SUSPICIOUS" ? "susp" : "safe";
-    el.className = "phone-alert " + cls;
+    el.classList.remove("hidden");
+    const color = colorFor(r.level);
     $("paIcon").textContent = r.level === "SAFE" ? "✅" : r.level === "SUSPICIOUS" ? "⚠️" : "🚨";
-    $("paLevel").textContent = r.level;
-    $("paRisk").textContent = r.risk;
+    const lvl = $("paLevel"); lvl.textContent = r.level; lvl.style.color = color;
+    const rk = $("paRisk"); rk.textContent = r.risk; rk.style.color = color;
     $("paCat").textContent = r.category_label !== "None" ? r.category_label : "No known scam pattern";
     $("paAdvice").textContent = r.advice;
     if (r.level !== "SAFE") speak(`Warning. This looks like a ${r.level === "SCAM" ? "scam" : "suspicious message"}. ${r.advice}`);
