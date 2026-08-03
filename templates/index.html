@@ -15,17 +15,83 @@
                 <p class="tagline">Stay alert. One brain guarding every channel.</p>
             </div>
         </div>
-        <div class="engine-badge">
-            {% if llm_active %}<span class="dot on"></span> Rules + LLM{% else %}<span class="dot"></span> Rule engine{% endif %}
+        <div class="topbar-right">
+            <button id="reportBtn" class="pill-btn">📊 Daily Report</button>
+            <div class="engine-badge">
+                {% if llm_active %}<span class="dot on"></span> Rules + LLM{% else %}<span class="dot"></span> Rule engine{% endif %}
+                <span class="sep">·</span>
+                {% if voice_active %}🔊 ElevenLabs{% else %}🔊 Web voice{% endif %}
+            </div>
         </div>
     </header>
 
     <main class="layout">
-        <!-- Left: analyzer -->
+        <!-- ============ iPhone simulator ============ -->
+        <section class="phone-col">
+            <div class="iphone">
+                <div class="dynamic-island"></div>
+                <div class="screen">
+                    <div class="ios-status">
+                        <span id="iosTime">9:41</span>
+                        <span class="ios-icons">•••• 📶 <span class="batt">100%</span></span>
+                    </div>
+
+                    <!-- Home screen -->
+                    <div id="phoneHome" class="ios-view home">
+                        <div class="home-clock">
+                            <div class="hc-time" id="homeTime">9:41</div>
+                            <div class="hc-date" id="homeDate">Monday, 3 August</div>
+                        </div>
+                        <div id="appGrid" class="app-grid"></div>
+                        <div class="ios-hint">Tap an app to see incoming messages</div>
+                    </div>
+
+                    <!-- App inbox list -->
+                    <div id="phoneApp" class="ios-view app hidden">
+                        <div class="ios-nav">
+                            <button class="ios-back" data-back="home">‹ Home</button>
+                            <span id="appTitle" class="ios-title">App</span>
+                            <span class="ios-nav-spacer"></span>
+                        </div>
+                        <div id="appList" class="app-list"></div>
+                    </div>
+
+                    <!-- Message detail -->
+                    <div id="phoneMsg" class="ios-view msg hidden">
+                        <div class="ios-nav">
+                            <button class="ios-back" data-back="app">‹ Back</button>
+                            <span id="msgTitle" class="ios-title">Message</span>
+                            <span class="ios-nav-spacer"></span>
+                        </div>
+                        <div id="msgBody" class="msg-body"></div>
+                        <div class="msg-actions">
+                            <button id="playCallBtn" class="ios-action ghost hidden">▶️ Play voice</button>
+                            <button id="scanBtn" class="ios-action">🛡️ Scan with SatarkAI</button>
+                        </div>
+                    </div>
+
+                    <!-- SatarkAI alert overlay -->
+                    <div id="phoneAlert" class="phone-alert hidden">
+                        <div class="pa-card">
+                            <div class="pa-icon" id="paIcon">⚠️</div>
+                            <div class="pa-level" id="paLevel">SCAM</div>
+                            <div class="pa-risk"><span id="paRisk">0</span><small>/100 risk</small></div>
+                            <div class="pa-cat" id="paCat"></div>
+                            <div class="pa-advice" id="paAdvice"></div>
+                            <button id="paClose" class="ios-action">Got it</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-indicator"></div>
+            </div>
+            <p class="phone-caption">📱 Live scam simulator — tap any message to test it</p>
+        </section>
+
+        <!-- ============ Analyzer + result ============ -->
         <section class="analyzer">
             <div class="card">
                 <h2>Analyze a message</h2>
-                <p class="hint">Paste any SMS, WhatsApp text, notification, email, or call transcript.</p>
+                <p class="hint">Tapping a message on the phone fills this form. Or paste your own below.</p>
 
                 <label class="field-label">Channel</label>
                 <div id="channelTabs" class="channel-tabs">
@@ -46,20 +112,14 @@
                 </div>
 
                 <label class="field-label" for="msgInput">Message</label>
-                <textarea id="msgInput" rows="7" placeholder="Paste the suspicious message here…"></textarea>
+                <textarea id="msgInput" rows="6" placeholder="Paste the suspicious message here…"></textarea>
 
                 <div class="actions">
                     <button id="analyzeBtn" class="primary">🔍 Analyze</button>
                     <button id="clearBtn" class="ghost">Clear</button>
                 </div>
-
-                <div class="samples-block">
-                    <label class="field-label">Or try a real-world sample:</label>
-                    <div id="sampleChips" class="sample-chips"></div>
-                </div>
             </div>
 
-            <!-- Result -->
             <div id="resultCard" class="card result hidden">
                 <div class="result-head">
                     <div class="gauge">
@@ -67,10 +127,7 @@
                             <circle cx="60" cy="60" r="52" class="gauge-bg"></circle>
                             <circle id="gaugeArc" cx="60" cy="60" r="52" class="gauge-arc"></circle>
                         </svg>
-                        <div class="gauge-center">
-                            <span id="riskNum">0</span>
-                            <small>risk</small>
-                        </div>
+                        <div class="gauge-center"><span id="riskNum">0</span><small>risk</small></div>
                     </div>
                     <div class="verdict">
                         <span id="levelBadge" class="level-badge">—</span>
@@ -79,9 +136,7 @@
                         <p id="engineTag" class="engine-tag"></p>
                     </div>
                 </div>
-
                 <div id="adviceBox" class="advice-box"></div>
-
                 <div class="detail-grid">
                     <div>
                         <h4>Why flagged</h4>
@@ -92,7 +147,6 @@
                         <div id="entitiesBox" class="entities"></div>
                     </div>
                 </div>
-
                 <div class="feedback-row">
                     <span>Was this right?</span>
                     <button class="fb" data-fb="scam">👍 It's a scam</button>
@@ -102,7 +156,7 @@
             </div>
         </section>
 
-        <!-- Right: stats + history -->
+        <!-- ============ Stats + history ============ -->
         <aside class="sidepanel">
             <div class="card stats-card">
                 <h2>Overview</h2>
@@ -114,7 +168,6 @@
                 </div>
                 <div id="byChannel" class="mini-bars"></div>
             </div>
-
             <div class="card history-card">
                 <h2>Recent activity</h2>
                 <div id="historyList" class="history"></div>
@@ -122,11 +175,27 @@
         </aside>
     </main>
 
+    <!-- Daily report modal -->
+    <div id="reportModal" class="modal hidden">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h2>📊 Daily Scam Report</h2>
+                <button id="reportClose" class="modal-x">✕</button>
+            </div>
+            <div id="reportBody" class="report-body"></div>
+            <div class="modal-foot">
+                <button id="emailReportBtn" class="primary">✉️ Email me this report</button>
+                <span id="emailMsg" class="fb-msg"></span>
+            </div>
+        </div>
+    </div>
+
     <footer class="foot">
         SatarkAI · Report scams at <strong>cybercrime.gov.in</strong> or call <strong>1930</strong>.
         Core analysis runs locally.
     </footer>
 
+    <audio id="ttsAudio" class="hidden"></audio>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

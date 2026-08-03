@@ -4,32 +4,32 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Use a throwaway DB so the test doesn't pollute real history.
 os.environ["SATARK_DB"] = "test_satark.db"
 
 import app as flask_app
 
 client = flask_app.app.test_client()
 
-print("GET /health ->", client.get("/health").get_json())
-print("GET /samples -> count:", len(client.get("/samples").get_json()["samples"]))
+print("GET /health   ->", client.get("/health").get_json())
+print("GET /          -> status", client.get("/").status_code)
+apps = client.get("/apps").get_json()["apps"]
+print("GET /apps     -> apps:", [f"{a['app']}({a['badge']})" for a in apps])
+inbox = client.get("/inbox").get_json()["items"]
+print("GET /inbox    -> items:", len(inbox))
 
-payload = {
-    "channel": "sms",
-    "sender": "+918877665544",
-    "text": "Your SBI account will be BLOCKED today, complete KYC now: http://sbi-kyc-verify.xyz/login",
-}
-r = client.post("/analyze", json=payload).get_json()
-res = r["result"]
-print(f"POST /analyze -> risk={res['risk']} level={res['level']} category={res['category_label']}")
-print("  reasons:", res["reasons"][:3])
+# analyze a few inbox items through the engine
+for m in inbox[:4]:
+    r = client.post("/analyze", json={
+        "text": m["text"], "channel": m["channel"],
+        "sender": m.get("sender", ""), "subject": m.get("subject", ""),
+    }).get_json()["result"]
+    tag = "SCAM-EXPECTED" if m.get("scam") else "safe-expected"
+    print(f"  {m['app']:13} {m['name'][:18]:20} risk={r['risk']:>3} {r['level']:11} ({tag})")
 
-print("GET /stats ->", client.get("/stats").get_json())
-print("GET /history -> items:", len(client.get("/history").get_json()["items"]))
-print("GET / (dashboard) -> status", client.get("/").status_code)
+rep = client.get("/report/daily").get_json()
+print("GET /report/daily -> scams:", rep["scams"], "suspicious:", rep["suspicious"], "threats:", len(rep["threats"]))
+print("POST /tts     -> status", client.post("/tts", json={"text": "hello"}).status_code, "(204 = use Web Speech)")
 
-# cleanup
 try:
     os.remove("test_satark.db")
 except OSError:

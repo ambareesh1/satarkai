@@ -82,6 +82,24 @@ def recent(limit: int = 50) -> List[Dict[str, Any]]:
     return out
 
 
+def since(ts: float, limit: int = 500) -> List[Dict[str, Any]]:
+    """All detections with timestamp >= ts (newest first)."""
+    with _connect() as conn:
+        rows = conn.execute(
+            "SELECT * FROM detections WHERE ts >= ? ORDER BY id DESC LIMIT ?",
+            (ts, limit),
+        ).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        try:
+            d["reasons"] = json.loads(d.get("reasons") or "[]")
+        except Exception:
+            d["reasons"] = []
+        out.append(d)
+    return out
+
+
 def set_feedback(det_id: int, label: str) -> bool:
     with _connect() as conn:
         cur = conn.execute(
