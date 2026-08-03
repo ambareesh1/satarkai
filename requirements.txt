@@ -1,0 +1,23 @@
+# --- SatarkAI dependencies ---
+
+# Web dashboard (only hard requirement for the text-analysis core)
+Flask>=3.0.0
+
+# ---- Optional: voice channel (Phase 3) ----
+# Speech-to-text (local, offline). faster-whisper is lighter/faster than openai-whisper on CPU.
+# faster-whisper>=1.0.0
+# sounddevice>=0.4.6      # live microphone streaming
+# soundfile>=0.12.1       # read/write wav
+# numpy>=1.24.0
+
+# ---- Optional: smarter intent + explanations via OpenRouter LLM ----
+# Falls back to the built-in rule engine automatically if not installed / no API key.
+requests>=2.31.0
+
+# ---- Optional: multilingual language detection ----
+# langdetect>=1.0.9
+
+# --- Notes ---
+# The core scam engine + dashboard run with ONLY Flask installed (everything else is stdlib).
+# Uncomment the voice section to enable the live call monitor (downloads a Whisper model on first run).
+# Set OPENROUTER_API_KEY in the environment to enable the LLM intent layer (optional).

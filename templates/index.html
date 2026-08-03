@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SatarkAI — Multi-Channel Scam Shield</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="logo">🛡️</span>
+            <div>
+                <h1>Satark<span>AI</span></h1>
+                <p class="tagline">Stay alert. One brain guarding every channel.</p>
+            </div>
+        </div>
+        <div class="engine-badge">
+            {% if llm_active %}<span class="dot on"></span> Rules + LLM{% else %}<span class="dot"></span> Rule engine{% endif %}
+        </div>
+    </header>
+
+    <main class="layout">
+        <!-- Left: analyzer -->
+        <section class="analyzer">
+            <div class="card">
+                <h2>Analyze a message</h2>
+                <p class="hint">Paste any SMS, WhatsApp text, notification, email, or call transcript.</p>
+
+                <label class="field-label">Channel</label>
+                <div id="channelTabs" class="channel-tabs">
+                    {% for c in channels %}
+                    <button class="chan-tab{% if loop.first %} active{% endif %}" data-channel="{{ c.id }}">{{ c.label }}</button>
+                    {% endfor %}
+                </div>
+
+                <div class="row two">
+                    <div>
+                        <label class="field-label" for="senderInput">Sender (optional)</label>
+                        <input id="senderInput" type="text" placeholder="e.g. +9198… or VM-SBIBNK" />
+                    </div>
+                    <div id="subjectWrap" class="hidden">
+                        <label class="field-label" for="subjectInput">Subject (email)</label>
+                        <input id="subjectInput" type="text" placeholder="Email subject line" />
+                    </div>
+                </div>
+
+                <label class="field-label" for="msgInput">Message</label>
+                <textarea id="msgInput" rows="7" placeholder="Paste the suspicious message here…"></textarea>
+
+                <div class="actions">
+                    <button id="analyzeBtn" class="primary">🔍 Analyze</button>
+                    <button id="clearBtn" class="ghost">Clear</button>
+                </div>
+
+                <div class="samples-block">
+                    <label class="field-label">Or try a real-world sample:</label>
+                    <div id="sampleChips" class="sample-chips"></div>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div id="resultCard" class="card result hidden">
+                <div class="result-head">
+                    <div class="gauge">
+                        <svg viewBox="0 0 120 120" class="gauge-svg">
+                            <circle cx="60" cy="60" r="52" class="gauge-bg"></circle>
+                            <circle id="gaugeArc" cx="60" cy="60" r="52" class="gauge-arc"></circle>
+                        </svg>
+                        <div class="gauge-center">
+                            <span id="riskNum">0</span>
+                            <small>risk</small>
+                        </div>
+                    </div>
+                    <div class="verdict">
+                        <span id="levelBadge" class="level-badge">—</span>
+                        <h3 id="categoryLabel">—</h3>
+                        <p id="confidence" class="confidence"></p>
+                        <p id="engineTag" class="engine-tag"></p>
+                    </div>
+                </div>
+
+                <div id="adviceBox" class="advice-box"></div>
+
+                <div class="detail-grid">
+                    <div>
+                        <h4>Why flagged</h4>
+                        <ul id="reasonsList" class="reasons"></ul>
+                    </div>
+                    <div>
+                        <h4>Detected entities</h4>
+                        <div id="entitiesBox" class="entities"></div>
+                    </div>
+                </div>
+
+                <div class="feedback-row">
+                    <span>Was this right?</span>
+                    <button class="fb" data-fb="scam">👍 It's a scam</button>
+                    <button class="fb" data-fb="safe">👎 It's safe</button>
+                    <span id="fbMsg" class="fb-msg"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right: stats + history -->
+        <aside class="sidepanel">
+            <div class="card stats-card">
+                <h2>Overview</h2>
+                <div class="stat-grid">
+                    <div class="stat scam"><span id="stScams">0</span><small>Scams</small></div>
+                    <div class="stat susp"><span id="stSusp">0</span><small>Suspicious</small></div>
+                    <div class="stat safe"><span id="stSafe">0</span><small>Safe</small></div>
+                    <div class="stat total"><span id="stTotal">0</span><small>Total</small></div>
+                </div>
+                <div id="byChannel" class="mini-bars"></div>
+            </div>
+
+            <div class="card history-card">
+                <h2>Recent activity</h2>
+                <div id="historyList" class="history"></div>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="foot">
+        SatarkAI · Report scams at <strong>cybercrime.gov.in</strong> or call <strong>1930</strong>.
+        Core analysis runs locally.
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
