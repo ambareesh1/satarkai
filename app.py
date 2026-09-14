@@ -23,13 +23,19 @@ from satark.samples import SAMPLES
 from satark.inbox import list_inbox, apps_summary
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 store.init()
 _engine = ScamEngine(use_llm=True)
 
 
 @app.route("/")
-def index():
+def home():
+    return render_template("home.html")
+
+
+@app.route("/dashboard")
+def dashboard():
     return render_template(
         "index.html",
         channels=[{"id": c, "label": CHANNEL_LABELS[c]} for c in CHANNELS],

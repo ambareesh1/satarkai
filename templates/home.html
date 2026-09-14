@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SatarkAI — Stay alert. One shield for every scam.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
+</head>
+<body class="home">
+  <nav class="nav" id="nav">
+    <a class="nav-brand" href="/">
+      <span class="nav-mark">🛡</span>
+      Satark<em>AI</em>
+    </a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">What it is</a>
+      <a href="#channels">Channels</a>
+      <a href="#how">How it works</a>
+      <a href="#catches">What it catches</a>
+      <a class="nav-cta" href="/dashboard">Open the shield</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <img class="hero-media" src="{{ url_for('static', filename='images/hero-shield.jpg') }}" alt="A person protected by SatarkAI while checking a smartphone in bright daylight" />
+    <div class="hero-veil"></div>
+    <div class="hero-copy">
+      <p class="eyebrow">सतर्क · alert · vigilant</p>
+      <h1>One brain. Every scam channel. Instant clarity.</h1>
+      <p class="hero-lead">SatarkAI is a multi-channel scam shield. Paste a call transcript, SMS, WhatsApp forward, notification, or email — and get a risk score, the scam type, and exactly what to do next.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/dashboard">Try it on a real message</a>
+        <a class="btn btn-ghost" href="#about">See how it protects you</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>0–100</strong><span>scam risk score</span></div>
+        <div><strong>5</strong><span>channels, one engine</span></div>
+        <div><strong>Local</strong><span>analysis stays on your machine</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="about">
+    <div class="section-head">
+      <p class="kicker">What SatarkAI is</p>
+      <h2>A single scam-detection brain for the way India is actually targeted.</h2>
+      <p>Scams no longer live in one inbox. They jump from a CBI-style phone call to a fake KYC SMS to a lottery WhatsApp to a refund email. SatarkAI watches all of those channels with the same engine, so the verdict is consistent — and explainable.</p>
+    </div>
+    <div class="meaning">
+      <div class="meaning-card">
+        <p class="word">Satark <small>सतर्क — stay alert</small></p>
+        <p>You give it the text. It extracts phones, UPI IDs, links, amounts, and OTP asks. It matches English and Hinglish scam signatures. Then it fuses that evidence into a SAFE / SUSPICIOUS / SCAM verdict with reasons you can read — not a black box.</p>
+        <p>The dashboard also includes a live phone simulator: tap Messages, WhatsApp, Mail, or Phone, open a sample, and scan it the way a real alert would fire.</p>
+      </div>
+      <div class="meaning-photo">
+        <img src="{{ url_for('static', filename='images/scene-analyze.jpg') }}" alt="SatarkAI risk score on a laptop next to a phone" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section channels" id="channels">
+    <div class="section-head">
+      <p class="kicker">Every channel it guards</p>
+      <h2>If a scam can reach you here, SatarkAI can score it.</h2>
+      <p>Each channel is only a thin adapter. The intelligence is shared — so a digital-arrest script is caught whether it arrives as a call transcript or a follow-up SMS.</p>
+    </div>
+
+    <article class="story">
+      <img src="{{ url_for('static', filename='images/scene-call.jpg') }}" alt="Incoming unknown call on a smartphone" />
+      <div>
+        <p class="kicker">Phone call</p>
+        <h3>Digital-arrest and impersonation calls</h3>
+        <p>Paste what the caller said — “CBI”, parcel with narcotics, stay on video, send money now. SatarkAI flags police impersonation, urgency, secrecy, and payment demands before fear takes over.</p>
+      </div>
+    </article>
+
+    <article class="story story-flip">
+      <img src="{{ url_for('static', filename='images/scene-sms.jpg') }}" alt="Phone on a kitchen counter showing a bank warning SMS" />
+      <div>
+        <p class="kicker">SMS</p>
+        <h3>Fake KYC, account-block, and OTP theft</h3>
+        <p>“Your SBI account will be BLOCKED today” plus a shady link is a classic. So is “share the OTP and CVV to stop fraud.” SatarkAI calls out the pressure, the credential grab, and the risky URL.</p>
+      </div>
+    </article>
+
+    <article class="story">
+      <img src="{{ url_for('static', filename='images/scene-whatsapp.jpg') }}" alt="WhatsApp open on a phone at a sunlit cafe" />
+      <div>
+        <p class="kicker">WhatsApp</p>
+        <h3>Lottery forwards and prize traps</h3>
+        <p>KBC lucky draws, registration fees, “send bank details.” Forward the chat into SatarkAI. Personal WhatsApp cannot be auto-read — the compliant model is paste or forward, then scan.</p>
+      </div>
+    </article>
+
+    <article class="story story-flip">
+      <img src="{{ url_for('static', filename='images/scene-notify.jpg') }}" alt="Stacked phone notifications with a protective overlay" />
+      <div>
+        <p class="kicker">Notifications</p>
+        <h3>Alerts that try to hijack your attention</h3>
+        <p>Courier-customs fees, electricity disconnection, job-and-loan bait — they often land as banners first. SatarkAI reads the wording the same way, wherever you copied it from.</p>
+      </div>
+    </article>
+
+    <article class="story">
+      <img src="{{ url_for('static', filename='images/scene-email.jpg') }}" alt="Laptop showing a suspicious refund email" />
+      <div>
+        <p class="kicker">Email</p>
+        <h3>Refund, tax, and phishing mail</h3>
+        <p>Fake income-tax refunds and lookalike senders. Paste the subject and body — or scan a mailbox if you add an app password later. You still get the category, the entities, and the safe next step.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" id="how">
+    <div class="section-head">
+      <p class="kicker">How it works</p>
+      <h2>Three steps. A clear verdict. Advice you can follow.</h2>
+    </div>
+    <div class="steps">
+      <article class="step">
+        <div class="step-num">1</div>
+        <h3>Bring any message</h3>
+        <p>Paste text, tap a sample in the phone simulator, or drop in a call transcript. Mark the channel so context stays honest.</p>
+      </article>
+      <article class="step">
+        <div class="step-num">2</div>
+        <h3>The engine scores it</h3>
+        <p>Patterns, entities, and sender/URL reputation fuse into 0–100. Optional LLM reasoning only runs if you add a key.</p>
+      </article>
+      <article class="step">
+        <div class="step-num">3</div>
+        <h3>You get the why</h3>
+        <p>SAFE, SUSPICIOUS, or SCAM — plus reasons, extracted UPI/phones/links, and plain-language advice. History stays in the dashboard.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="catches">
+    <div class="section-head">
+      <p class="kicker">What it is trained to notice</p>
+      <h2>The scam scripts that keep showing up in India.</h2>
+    </div>
+    <ul class="catch">
+      <li><span>Impersonation</span><h3>Digital arrest / police–CBI</h3><p>Stay on the call, tell no one, pay to “close the case.”</p></li>
+      <li><span>Banking</span><h3>KYC and account-block</h3><p>Urgent links that steal logins before the “deadline.”</p></li>
+      <li><span>Credentials</span><h3>OTP, PIN, CVV theft</h3><p>Anyone asking for the code that just arrived is the fraud.</p></li>
+      <li><span>Prize bait</span><h3>Lottery and KBC forwards</h3><p>You never pay a fee to collect a prize you did not enter.</p></li>
+      <li><span>Money traps</span><h3>Job, loan, refund, crypto</h3><p>Instant money stories that end in a UPI to a stranger.</p></li>
+      <li><span>Fear scripts</span><h3>Courier, power, sextortion</h3><p>Customs fees, disconnection threats, and shame-based payouts.</p></li>
+    </ul>
+  </section>
+
+  <section class="section">
+    <div class="privacy">
+      <div>
+        <p class="kicker">Privacy by default</p>
+        <h2>The core engine runs on your machine.</h2>
+        <p>Flask + the rule engine are enough. Nothing is sent out unless you opt into the optional OpenRouter LLM layer. Report confirmed scams at <strong>cybercrime.gov.in</strong> or call <strong>1930</strong>.</p>
+      </div>
+      <img src="{{ url_for('static', filename='images/scene-family.jpg') }}" alt="A family together in a bright living room" />
+    </div>
+  </section>
+
+  <section class="cta">
+    <img src="{{ url_for('static', filename='images/hero-shield.jpg') }}" alt="" />
+    <div class="cta-veil"></div>
+    <div class="cta-copy">
+      <p class="eyebrow">Ready when the next message lands</p>
+      <h2>Open the shield and test a sample in seconds.</h2>
+      <p>Use the live phone, or paste something you actually received. SatarkAI will tell you the risk, the category, and the safe move.</p>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="/dashboard">Launch SatarkAI</a>
+        <a class="btn btn-ghost" href="#channels">Review the channels</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>SatarkAI · Multi-Channel Scam Shield</span>
+    <span>Report scams at <strong>cybercrime.gov.in</strong> · Helpline <strong>1930</strong></span>
+  </footer>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>
