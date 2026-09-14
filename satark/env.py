@@ -9,8 +9,11 @@ from __future__ import annotations
 
 import os
 
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def load_dotenv(path: str = ".env") -> None:
+
+def load_dotenv(path: str | None = None) -> None:
+    path = path or os.path.join(_ROOT, ".env")
     if not os.path.exists(path):
         return
     try:

@@ -77,8 +77,13 @@ def refine(message: Message, det: Detection) -> Optional[Detection]:
     data = json.loads(content)
 
     # Blend LLM risk with rule risk (favor the higher for safety).
+    # Production rule: a rule-engine SCAM can never be talked down to SAFE.
     llm_risk = int(max(0, min(100, data.get("risk", det.risk))))
     blended = max(det.risk, llm_risk) if llm_risk >= det.risk else int(round(0.6 * llm_risk + 0.4 * det.risk))
+    if det.level == "SCAM":
+        blended = max(blended, 70)
+    elif det.level == "SUSPICIOUS":
+        blended = max(blended, 40)
     level = level_for(blended)
 
     reasons = data.get("reasons") or det.reasons

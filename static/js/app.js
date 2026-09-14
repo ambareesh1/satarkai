@@ -159,6 +159,31 @@ function renderEntities(e) {
 }
 
 /* ================= In-phone alert + voice ================= */
+const VOICE_KEY = "satark-voice";
+const voiceEngine = ($("voiceToggle") && $("voiceToggle").dataset.voiceEngine) || "web";
+let voiceOn = localStorage.getItem(VOICE_KEY) !== "off";
+
+function stopVoice() {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    const audio = $("ttsAudio");
+    if (audio) {
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
+    }
+}
+
+function renderVoiceToggle() {
+    const btn = $("voiceToggle");
+    const label = $("voiceToggleLabel");
+    if (!btn || !label) return;
+    btn.setAttribute("aria-pressed", voiceOn ? "true" : "false");
+    btn.title = voiceOn ? "Turn voice alerts off" : "Turn voice alerts on";
+    label.textContent = voiceOn
+        ? (voiceEngine === "elevenlabs" ? "🔊 ElevenLabs" : "🔊 Web voice")
+        : "🔇 Voice off";
+}
+
 function showAlert(r) {
     const el = $("phoneAlert");
     el.classList.remove("hidden");
@@ -172,6 +197,7 @@ function showAlert(r) {
 }
 
 async function speak(text) {
+    if (!voiceOn) return;
     try {
         const res = await fetch("/tts", {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -185,7 +211,6 @@ async function speak(text) {
             return;
         }
     } catch (e) { /* fall through to web speech */ }
-    // Free browser fallback
     if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
@@ -281,7 +306,13 @@ document.querySelectorAll(".ios-back").forEach((b) =>
     b.addEventListener("click", () => showView(b.dataset.back)));
 $("scanBtn").addEventListener("click", () => analyze(true));
 $("playCallBtn").addEventListener("click", () => { if (currentMsg) speak(currentMsg.text); });
-$("paClose").addEventListener("click", () => { $("phoneAlert").classList.add("hidden"); if ("speechSynthesis" in window) window.speechSynthesis.cancel(); });
+$("voiceToggle").addEventListener("click", () => {
+    voiceOn = !voiceOn;
+    localStorage.setItem(VOICE_KEY, voiceOn ? "on" : "off");
+    if (!voiceOn) stopVoice();
+    renderVoiceToggle();
+});
+$("paClose").addEventListener("click", () => { $("phoneAlert").classList.add("hidden"); stopVoice(); });
 $("analyzeBtn").addEventListener("click", () => analyze(false));
 $("clearBtn").addEventListener("click", () => {
     $("msgInput").value = ""; $("senderInput").value = ""; $("subjectInput").value = "";
@@ -305,6 +336,7 @@ $("emailReportBtn").addEventListener("click", async () => {
 });
 
 /* ================= Init ================= */
+renderVoiceToggle();
 tickClock(); setInterval(tickClock, 10000);
 loadPhone();
 refresh();

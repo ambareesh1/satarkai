@@ -145,11 +145,15 @@
         <div class="flex items-center gap-3">
             <a href="/" class="pill hover:border-brand-500/60">Home</a>
             <button id="reportBtn" class="pill hover:border-brand-500/60 cursor-pointer">📊 <span>Daily Report</span></button>
-            <div class="pill">
-                {% if llm_active %}<span class="w-2 h-2 rounded-full bg-safe"></span> Rules + LLM{% else %}<span class="w-2 h-2 rounded-full bg-slate-400"></span> Rule engine{% endif %}
-                <span class="opacity-40">·</span>
-                {% if voice_active %}🔊 ElevenLabs{% else %}🔊 Web voice{% endif %}
+            <div class="pill" title="Local rule engine is the production verdict">
+                <span class="w-2 h-2 rounded-full bg-safe"></span>
+                {% if llm_active %}Rule engine + LLM{% else %}Rule engine · live{% endif %}
             </div>
+            <button id="voiceToggle" type="button" class="pill hover:border-brand-500/60 cursor-pointer"
+                data-voice-engine="{% if voice_active %}elevenlabs{% else %}web{% endif %}"
+                aria-pressed="true" title="Turn voice alerts off">
+                <span id="voiceToggleLabel">{% if voice_active %}🔊 ElevenLabs{% else %}🔊 Web voice{% endif %}</span>
+            </button>
         </div>
     </header>
 
@@ -332,6 +336,6 @@
     </footer>
 
     <audio id="ttsAudio" class="hidden"></audio>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}?v=voice-toggle"></script>
 </body>
 </html>

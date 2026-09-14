@@ -46,11 +46,11 @@ CATEGORIES: Dict[str, Dict] = {
         "label": "KYC / Account-block",
         "advice": "Banks never ask you to update KYC via a link or call. Open your bank app directly or visit a branch. Don't click the link.",
         "groups": [
-            (3, ["kyc update", "kyc pending", "kyc expire", "update your kyc", "kyc suspend", "complete your kyc"]),
-            (3, ["account will be blocked", "account blocked", "account suspended", "khata band", "account deactivate"]),
-            (2, ["pan card update", "link your pan", "update pan", "aadhaar update", "verify your account", "re-verify"]),
+            (3, ["kyc update", "kyc pending", "kyc expire", "update your kyc", "kyc suspend", "complete your kyc", "kyc mismatch"]),
+            (3, ["account will be blocked", "account blocked", "account suspended", "khata band", "account deactivate", "put on hold", "wallet has been put on hold"]),
+            (2, ["pan card update", "link your pan", "update pan", "aadhaar update", "verify your account", "re-verify", "permanent suspension"]),
             (2, ["net banking blocked", "debit card blocked", "card will be deactivated", "reward points expire", "redeem your points"]),
-            (1, ["click the link to update", "click here to verify", "neeche diye link", "link par click"]),
+            (1, ["click the link to update", "click here to verify", "click here to update", "neeche diye link", "link par click"]),
         ],
     },
     "otp_pin": {
@@ -78,9 +78,9 @@ CATEGORIES: Dict[str, Dict] = {
         "label": "Fake job / Instant loan",
         "advice": "Real jobs don't charge a registration fee, and real lenders don't approve loans before you apply. Never pay to get paid.",
         "groups": [
-            (3, ["pay registration fee for job", "job registration fee", "security deposit for job", "pay to get the job"]),
+            (3, ["pay registration fee for job", "job registration fee", "security deposit for job", "pay to get the job", "refundable registration", "pay a refundable registration"]),
             (3, ["loan approved", "loan is approved", "pre-approved loan", "loan pre-approved", "is pre-approved", "pre approved", "instant loan", "loan without documents", "no documents needed", "loan disbursed", "disburse instantly", "processing fee for loan", "refundable processing fee"]),
-            (2, ["work from home earn", "part time job earn", "earn daily", "earn per day", "ghar baithe kamaye", "roz kamaye", "task based job", "like and subscribe task", "rate the hotel task", "loan of rs", "loan of ₹", "processing fee of"]),
+            (2, ["work from home earn", "work from home", "part time job earn", "part time job", "earn daily", "earn rs", "earn ₹", "earn per day", "ghar baithe kamaye", "roz kamaye", "task based job", "task based work", "like and subscribe task", "rate the hotel task", "loan of rs", "loan of ₹", "processing fee of"]),
             (2, ["telegram task", "prepaid task", "recharge task", "commission after task"]),
             (1, ["no experience needed", "limited seats", "hurry apply now", "apply now"]),
         ],

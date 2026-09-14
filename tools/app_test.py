@@ -10,8 +10,11 @@ import app as flask_app
 
 client = flask_app.app.test_client()
 
-print("GET /health   ->", client.get("/health").get_json())
+health = client.get("/health").get_json()
+assert health.get("ok") and health.get("engine_ready") and health.get("engine") == "rules"
+print("GET /health   ->", health)
 print("GET /          -> status", client.get("/").status_code)
+print("GET /dashboard -> status", client.get("/dashboard").status_code)
 apps = client.get("/apps").get_json()["apps"]
 print("GET /apps     -> apps:", [f"{a['app']}({a['badge']})" for a in apps])
 inbox = client.get("/inbox").get_json()["items"]

@@ -2,6 +2,7 @@
 
 # Web dashboard (only hard requirement for the text-analysis core)
 Flask>=3.0.0
+waitress>=3.0.0
 
 # ---- Optional: voice channel (Phase 3) ----
 # Speech-to-text (local, offline). faster-whisper is lighter/faster than openai-whisper on CPU.

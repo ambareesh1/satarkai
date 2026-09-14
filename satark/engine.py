@@ -29,6 +29,23 @@ class ScamEngine:
         return self._llm is not None
 
     def analyze(self, message: Message) -> Detection:
+        text = (message.text or "").strip()
+        if not text and not (message.subject or "").strip():
+            return Detection(
+                risk=0,
+                level="SAFE",
+                category="none",
+                category_label="None",
+                confidence=0.9,
+                reasons=["No message text to analyze"],
+                entities={"upi": [], "urls": [], "domains": [], "shorteners": [],
+                          "emails": [], "phones": [], "amounts": [], "otp_terms": []},
+                advice="Paste the full message so SatarkAI can score it.",
+                action=action_for("SAFE"),
+                matched=[],
+                engine="rules",
+            )
+
         det = risk_mod.score(message)
 
         if self._llm is not None:
@@ -39,6 +56,8 @@ class ScamEngine:
             except Exception:
                 pass  # never let the LLM break a verdict
 
+        if not getattr(det, "engine", None):
+            det.engine = "rules"
         return det
 
     def analyze_text(self, text: str, channel: str = "sms",

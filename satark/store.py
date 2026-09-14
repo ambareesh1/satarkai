@@ -14,12 +14,21 @@ from typing import Any, Dict, List, Optional
 
 from .message import Message, Detection
 
-_DB_PATH = os.environ.get("SATARK_DB", "satark.db")
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _db_path() -> str:
+    override = os.environ.get("SATARK_DB")
+    if override:
+        return override if os.path.isabs(override) else os.path.join(_ROOT, override)
+    return os.path.join(_ROOT, "satark.db")
 
 
 def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(_DB_PATH)
+    conn = sqlite3.connect(_db_path(), timeout=10, check_same_thread=False)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA busy_timeout=5000")
     return conn
 
 

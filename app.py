@@ -1,15 +1,17 @@
 """SatarkAI - Flask dashboard.
 
-Exposes the multi-channel scam engine over a small JSON API and serves a
-single-page dashboard with an "analyze-anything" box, live verdicts, a unified
-cross-channel history, and stats.
+The rule engine is the production path. Optional LLM / TTS / email only
+augment it; the app stays usable with Flask + the local rules.
 
 Run:
     python app.py
-Then open http://127.0.0.1:5000
+Then open http://127.0.0.1:7000
 """
 
 from __future__ import annotations
+
+import logging
+import os
 
 from flask import Flask, Response, jsonify, render_template, request
 
@@ -22,11 +24,16 @@ from satark import store, report as report_mod, mailer, tts
 from satark.samples import SAMPLES
 from satark.inbox import list_inbox, apps_summary
 
+MAX_TEXT = 8000
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["MAX_CONTENT_LENGTH"] = 64 * 1024
+app.config["SECRET_KEY"] = os.environ.get("SATARK_SECRET", "satark-local-dev")
+app.logger.setLevel(logging.INFO)
 
 store.init()
-_engine = ScamEngine(use_llm=True)
+_engine = ScamEngine(use_llm=os.environ.get("SATARK_USE_LLM", "1") != "0")
 
 
 @app.route("/")
@@ -61,6 +68,8 @@ def analyze():
     text = (data.get("text") or "").strip()
     if not text:
         return jsonify({"ok": False, "error": "Please enter a message to analyze."}), 400
+    if len(text) > MAX_TEXT:
+        return jsonify({"ok": False, "error": f"Message is too long (max {MAX_TEXT} characters)."}), 400
 
     channel = data.get("channel") or "sms"
     if channel not in CHANNELS:
@@ -69,16 +78,21 @@ def analyze():
     msg = Message(
         text=text,
         channel=channel,
-        sender=(data.get("sender") or "").strip(),
-        subject=(data.get("subject") or "").strip(),
+        sender=(data.get("sender") or "").strip()[:200],
+        subject=(data.get("subject") or "").strip()[:300],
     )
-    det = _engine.analyze(msg)
-    det_id = store.record(msg, det)
+    try:
+        det = _engine.analyze(msg)
+        det_id = store.record(msg, det)
+    except Exception:
+        app.logger.exception("Rule engine failed")
+        return jsonify({"ok": False, "error": "Analysis failed. Please try again."}), 500
 
     result = det.to_dict()
     result["id"] = det_id
     result["channel"] = channel
     result["channel_label"] = CHANNEL_LABELS[channel]
+    result.setdefault("engine", "rules")
     return jsonify({"ok": True, "result": result})
 
 
@@ -171,6 +185,8 @@ def tts_route():
 def health():
     return jsonify({
         "ok": True,
+        "engine": "rules",
+        "engine_ready": True,
         "llm": _engine.llm_active,
         "voice": tts.configured(),
         "email": mailer.configured(),
@@ -178,4 +194,11 @@ def health():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=7000, debug=False)
+    host = os.environ.get("SATARK_HOST", "0.0.0.0")
+    port = int(os.environ.get("SATARK_PORT", "7000"))
+    try:
+        from waitress import serve
+        print(f"SatarkAI ready  http://127.0.0.1:{port}  (rule engine live)", flush=True)
+        serve(app, host=host, port=port, threads=8)
+    except ImportError:
+        app.run(host=host, port=port, debug=False)
